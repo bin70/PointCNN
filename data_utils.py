@@ -1,3 +1,4 @@
+#coding=utf-8
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -105,7 +106,7 @@ def save_ply_point_with_normal(data_sample, folder):
         filename_pts = os.path.join(folder, '{:08d}.ply'.format(idx))
         save_ply(sample[..., :3], filename_pts, normals=sample[..., 3:])
 
-
+# 组合并乱序
 def grouped_shuffle(inputs):
     for idx in range(len(inputs) - 1):
         assert (len(inputs[idx]) == len(inputs[idx + 1]))
@@ -159,7 +160,7 @@ def load_seg(filelist):
 
     folder = os.path.dirname(filelist)
     for line in open(filelist):
-        data = h5py.File(os.path.join(folder, line.strip()))
+        data = h5py.File(os.path.join(folder, line.strip()), mode='r')
         points.append(data['data'][...].astype(np.float32))
         labels.append(data['label'][...].astype(np.int64))
         point_nums.append(data['data_num'][...].astype(np.int32))

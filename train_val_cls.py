@@ -75,7 +75,7 @@ def main():
         repeat_num = setting.balance_fn(label_train)
         data_train = np.repeat(data_train, repeat_num, axis=0)
         label_train = np.repeat(label_train, repeat_num, axis=0)
-        data_train, label_train = data_utils.grouped_shuffle([data_train, label_train])
+        data_train, label_train = data_utils.grouped_shuffle([data_train, label_train]) # pylint: disable=unbalanced-tuple-unpacking 
         num_epochs = math.floor(num_epochs * (num_train_before_balance / data_train.shape[0]))
 
     if setting.save_ply_fn is not None:

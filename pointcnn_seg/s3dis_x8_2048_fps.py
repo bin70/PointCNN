@@ -1,11 +1,11 @@
 #!/usr/bin/python3
 import math
 
-num_class = 13
+num_class = 13 #室内语义目标共13类
 
-sample_num = 2048
+sample_num = 2048 #采样2048个点
 
-batch_size = 16
+batch_size = 8
 
 num_epochs = 1024
 
@@ -60,7 +60,10 @@ sampling = 'fps'
 optimizer = 'adam'
 epsilon = 1e-5
 
-data_dim = 6
+# xyzrgb
+#data_dim = 6
+# 仅使用xyz
+data_dim = 3
 use_extra_features = True
 with_normal_feature = False
 with_X_transformation = True

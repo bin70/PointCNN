@@ -2,15 +2,16 @@
 
 gpu=
 setting=
-models_folder="../../models/cls"
-train_files="../../data/modelnet/train_files.txt"
-val_files="../../data/modelnet/test_files.txt"
+ckpt_load=
+models_folder="../../models"
+train_files="../../data/train_files.txt"
+val_files="../../data/test_files.txt"
 
-usage() { echo "train/val pointcnn_cls with -g gpu_id -x setting options"; }
+usage() { echo "train/val pointcnn_cls with -g gpu_id -x setting options -l load_ckpt"; }
 
 gpu_flag=0
 setting_flag=0
-while getopts g:x:h opt; do
+while getopts g:x:l:h opt; do
   case $opt in
   g)
     gpu_flag=1;
@@ -19,6 +20,9 @@ while getopts g:x:h opt; do
   x)
     setting_flag=1;
     setting=${OPTARG}
+    ;;
+  l)
+    ckpt_load=${OPTARG}
     ;;
   h)
     usage; exit;;
@@ -44,6 +48,5 @@ then
   mkdir -p "$models_folder"
 fi
 
-
 echo "Train/Val with setting $setting on GPU $gpu!"
-CUDA_VISIBLE_DEVICES=$gpu python3 ../train_val_cls.py --no_code_backup -t $train_files -v $val_files -s $models_folder -m pointcnn_cls -x $setting > $models_folder/pointcnn_cls_$setting.txt 2>&1 &
+CUDA_VISIBLE_DEVICES=$gpu python3 ../train_val_cls.py --log - --no_timestamp_folder -t $train_files -v $val_files -s $models_folder -m pointcnn_cls -l $ckpt_load -x $setting 2>&1 & #> $models_folder/pointcnn_cls_$setting.txt  2>&1 &

@@ -7,8 +7,8 @@ import argparse
 import os
 import numpy as np
 
-DEFAULT_DATA_DIR = '../../data/Stanford3dDataset_v1.2_Aligned_Version'
-DEFAULT_OUTPUT_DIR = '../../data/S3DIS/prepare_label_rgb'
+DEFAULT_DATA_DIR = '../data/Stanford3dDataset_v1.2_Aligned_Version'
+DEFAULT_OUTPUT_DIR = '../data/S3DIS'
 
 p = argparse.ArgumentParser()
 p.add_argument(

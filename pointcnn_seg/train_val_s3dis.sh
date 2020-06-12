@@ -3,8 +3,8 @@
 gpu=
 setting=
 area=
-models_folder="../../models/seg/"
-data_folder="../../data/s3dis/"
+models_folder="../models/seg"
+data_folder="../data/S3DIS/"
 
 usage() { echo "train/val pointcnn_seg with -g gpu_id -x setting -a area options"; }
 
@@ -56,4 +56,4 @@ then
 fi
 
 echo "Train/Val with setting $setting on GPU $gpu for Area $area!"
-CUDA_VISIBLE_DEVICES=$gpu python3 ../train_val_seg.py -t $data_folder/train_files_for_val_on_Area_$area.txt -v $data_folder/val_files_Area_$area.txt -s $models_folder -m pointcnn_seg -x $setting > $models_folder/pointcnn_seg_$setting.txt 2>&1 &
+CUDA_VISIBLE_DEVICES=$gpu python3 ../train_val_seg.py --no_code_backup -t $data_folder/train_files_for_val_on_Area_$area.txt -v $data_folder/val_files_Area_$area.txt -s $models_folder -m pointcnn_seg -x $setting #> $models_folder/pointcnn_seg_$setting.txt 2>&1 &

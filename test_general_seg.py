@@ -73,8 +73,9 @@ def main():
         print('{}-Checkpoint loaded from {}!'.format(datetime.now(), args.load_ckpt))
 
         indices_batch_indices = np.tile(np.reshape(np.arange(batch_size), (batch_size, 1, 1)), (1, sample_num, 1))
-
+        # 获得文件夹名字
         folder = os.path.dirname(args.filelist)
+        # 与文件名拼接起来
         filenames = [os.path.join(folder, line.strip()) for line in open(args.filelist)]
         for filename in filenames:
             print('{}-Reading {}...'.format(datetime.now(), filename))
@@ -90,7 +91,7 @@ def main():
             for batch_idx in range(batch_num):
                 if batch_idx % 10 == 0:
                     print('{}-Processing {} of {} batches.'.format(datetime.now(), batch_idx, batch_num))
-                points_batch = data[[batch_idx] * batch_size, ...]
+                points_batch = data[[batch_idx] * batch_size, ..., 0:3]
                 point_num = data_num[batch_idx]
 
                 tile_num = math.ceil((sample_num * batch_size) / point_num)
@@ -131,7 +132,9 @@ def main():
 
             if args.save_ply:
                 print('{}-Saving ply of {}...'.format(datetime.now(), filename_pred))
-                filepath_label_ply = os.path.join(filename_pred[:-3] + 'ply_label')
+                if not os.path.exists(filename_pred[:-3]):
+                    os.mkdir(filename_pred[:-3])
+                filepath_label_ply = os.path.join(filename_pred[:-3], 'ply_label')
                 data_utils.save_ply_property_batch(data[:, :, 0:3], labels_pred[...],
                                                    filepath_label_ply, data_num[...], setting.num_class)
             ######################################################################

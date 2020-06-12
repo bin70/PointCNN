@@ -44,15 +44,19 @@ def main():
         filename_filelist_h5 = os.path.join(folder_scanenet, '%s_files.txt' % folder)
         with open(filename_filelist_h5, 'w') as filelist_h5:
             filelist = os.listdir(folder_pts)
-            for idx_pts, filename in enumerate(filelist):
+            for idx_pts, filename in enumerate(filelist): # enumerate能同时返回idx和元素
                 label_object = label_dict[int(filename[:-4].split('_')[-1])]
                 filename_pts = os.path.join(folder_pts, filename)
                 xyzrgbs = np.array([[float(value) for value in xyzrgb.split(' ')]
                                for xyzrgb in open(filename_pts, 'r') if len(xyzrgb.split(' ')) == 6])
+                # 打乱点云中的点,为了随机采样
                 np.random.shuffle(xyzrgbs)
-                pt_num = xyzrgbs.shape[0]
+                # 当前帧总点数
+                pt_num = xyzrgbs.shape[0] 
+                # 以编号方式,对点云进行随机采样,若总点数少于采样数则进行重复采样
                 indices = np.random.choice(pt_num, sample_num, replace=(pt_num < sample_num))
-                points_array = xyzrgbs[indices]
+                # 取得采样后的点云数据
+                points_array = xyzrgbs[indices] # 这种赋值方式也太秀了吧 # 有什么秀的,不就用下标访问列表吗
                 points_array[..., 3:] = points_array[..., 3:]/255 - 0.5 # normalize colors
 
                 idx_in_batch = idx_pts % batch_size

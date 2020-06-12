@@ -2,9 +2,9 @@
 
 gpu=
 setting=
-models_folder="../../models/cls"
-train_files="../../data/modelnet/train_files.txt"
-val_files="../../data/modelnet/test_files.txt"
+models_folder="../../models/mynet/"
+#train_files="../../data/mynet/train_files.txt"
+test_files="../../data/mynet/test_files.txt"
 
 usage() { echo "train/val pointcnn_cls with -g gpu_id -x setting options"; }
 
@@ -44,6 +44,5 @@ then
   mkdir -p "$models_folder"
 fi
 
-
-echo "Train/Val with setting $setting on GPU $gpu!"
-CUDA_VISIBLE_DEVICES=$gpu python3 ../train_val_cls.py --no_code_backup -t $train_files -v $val_files -s $models_folder -m pointcnn_cls -x $setting > $models_folder/pointcnn_cls_$setting.txt 2>&1 &
+echo "Test with setting $setting on GPU $gpu!"
+CUDA_VISIBLE_DEVICES=$gpu python3 ../test_mynet_cls.py -t $test_files -l "/home/elvin/models/mynet/pointcnn_cls_mynet_2019-07-05-20-00-17_31693/ckpts/iter-528" -s $models_folder -m pointcnn_cls -x $setting > $models_folder/pointcnn_cls_$setting.txt 2>&1 &

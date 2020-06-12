@@ -214,6 +214,7 @@ def main():
         for batch_idx_train in range(batch_num):
             ######################################################################
             # Validation
+            # 训练次数到达一定步长时，验证一次
             if (batch_idx_train % step_val == 0 and (batch_idx_train != 0 or args.load_ckpt is not None)) \
                     or batch_idx_train == batch_num - 1:
                 filename_ckpt = os.path.join(folder_ckpt, 'iter')
@@ -225,7 +226,8 @@ def main():
                     start_idx = batch_size * batch_val_idx
                     end_idx = min(start_idx + batch_size, num_val)
                     batch_size_val = end_idx - start_idx
-                    points_batch = data_val[start_idx:end_idx, ...]
+                    # 从这里读入点云
+                    points_batch = data_val[start_idx:end_idx, ..., 0:3]
                     points_num_batch = data_num_val[start_idx:end_idx, ...]
                     labels_batch = label_val[start_idx:end_idx, ...]
                     weights_batch = np.array(label_weights_list)[labels_batch]
@@ -258,7 +260,7 @@ def main():
             start_idx = (batch_size * batch_idx_train) % num_train
             end_idx = min(start_idx + batch_size, num_train)
             batch_size_train = end_idx - start_idx
-            points_batch = data_train[start_idx:end_idx, ...]
+            points_batch = data_train[start_idx:end_idx, ..., 0:3]
             points_num_batch = data_num_train[start_idx:end_idx, ...]
             labels_batch = label_train[start_idx:end_idx, ...]
             weights_batch = np.array(label_weights_list)[labels_batch]

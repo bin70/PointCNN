@@ -13,15 +13,19 @@ map_fn = None
 keep_remainder = True
 save_ply_fn = None
 
-num_class = 40
+num_class = 2
+data_dim = 3 # 根据点云类型进行修改
 
-sample_num = 1024
+sample_num = 2048 # 采样点数
+sampling = 'random'
 
-batch_size = 128
+#batch_size = 128
+batch_size = 4
 
-num_epochs = 1024
+#num_epochs = 1024
+num_epochs = 10
 
-step_val = 500
+step_val = 500 # 这个参数干嘛的不知道
 
 learning_rate_base = 0.01
 decay_steps = 8000
@@ -47,24 +51,21 @@ x = 3
 
 xconv_param_name = ('K', 'D', 'P', 'C', 'links')
 xconv_params = [dict(zip(xconv_param_name, xconv_param)) for xconv_param in
-                [(8, 1, -1, 20 * x, []),
-                 (12, 2, 384, 36 * x, []),
-                 (16, 2, 128, 72 * x, []),
-                 (16, 3, 128, 136 * x, [])]]
+                [(8, 1, -1, 16 * x, []),
+                 (12, 2, 384, 32 * x, []),
+                 (16, 2, 128, 64 * x, []),
+                 (16, 3, 128, 128 * x, [])]]
 
 with_global = True
 
 fc_param_name = ('C', 'dropout_rate')
 fc_params = [dict(zip(fc_param_name, fc_param)) for fc_param in
-             [(136 * x, 0.0),
+             [(128 * x, 0.0),
               (64 * x, 0.8)]]
-
-sampling = 'random'
 
 optimizer = 'adam'
 epsilon = 1e-2
 
-data_dim = 6
 use_extra_features = False
-with_X_transformation = False
+with_X_transformation = True
 sorting_method = None

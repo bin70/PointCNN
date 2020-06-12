@@ -21,7 +21,7 @@ def main():
     args = parser.parse_args()
     print(args)
 
-    root = args.folder if args.folder else '../../data/s3dis/'
+    root = args.folder if args.folder else '../data/S3DIS/prepare_label_rgb'
 
     area_h5s = [[] for _ in range(6)]
     for area_idx in range(1, 7):

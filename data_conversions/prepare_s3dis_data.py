@@ -24,11 +24,12 @@ def main():
     parser.add_argument('--block_size', '-b', help='Block size', type=float, default=1.5)
     parser.add_argument('--grid_size', '-g', help='Grid size', type=float, default=0.03)
     parser.add_argument('--save_ply', '-s', help='Convert .pts to .ply', action='store_true')
+    parser.add_argument('--output_folder', '-o', help='Path to output data')
 
     args = parser.parse_args()
     print(args)
 
-    root = args.folder if args.folder else '../../data/s3dis'
+    root = args.folder if args.folder else '../data/S3DIS'
     max_point_num = args.max_point_num
 
     batch_size = 2048
@@ -41,6 +42,7 @@ def main():
     for area_idx in range(1, 7):
         folder = os.path.join(root, 'Area_%d' % area_idx)
         datasets = [dataset for dataset in os.listdir(folder)]
+        # 每个dataset对应一个房间
         for dataset_idx, dataset in enumerate(datasets):
             dataset_marker = os.path.join(folder, dataset, ".dataset")
             if os.path.exists(dataset_marker):
@@ -74,8 +76,10 @@ def main():
                 xyz_blocks = np.floor((xyz - xyz_min) / block_size).astype(np.int)
 
                 print('{}-Collecting points belong to each block...'.format(datetime.now(), xyzrgb.shape[0]))
+                # point_block_indices是旧列表的元素在新列表中的位置
                 blocks, point_block_indices, block_point_counts = np.unique(xyz_blocks, return_inverse=True,
                                                                             return_counts=True, axis=0)
+                # 某个房间数据被划分成多少个块
                 block_point_indices = np.split(np.argsort(point_block_indices), np.cumsum(block_point_counts[:-1]))
                 print('{}-{} is split into {} blocks.'.format(datetime.now(), dataset, blocks.shape[0]))
 
@@ -172,7 +176,11 @@ def main():
                         if ((idx + 1) % batch_size == 0) or \
                                 (block_idx == idx_last_non_empty_block and block_split_idx == block_split_num - 1):
                             item_num = idx_in_batch + 1
-                            filename_h5 = os.path.join(folder, dataset, '%s_%d.h5' % (offset_name, idx_h5))
+                            out_sub_path = os.path.join(args.output_folder, 'Area_%d' % area_idx, dataset)
+                            if not os.path.exists( out_sub_path ):
+                                os.makedirs(out_sub_path)
+                            #filename_h5 = os.path.join(folder, dataset, '%s_%d.h5' % (offset_name, idx_h5))
+                            filename_h5 = os.path.join(out_sub_path, '%s_%d.h5' % (offset_name, idx_h5))
                             print('{}-Saving {}...'.format(datetime.now(), filename_h5))
 
                             file = h5py.File(filename_h5, 'w')
@@ -185,13 +193,13 @@ def main():
 
                             if args.save_ply:
                                 print('{}-Saving ply of {}...'.format(datetime.now(), filename_h5))
-                                filepath_label_ply = os.path.join(folder, dataset, 'ply_label',
+                                filepath_label_ply = os.path.join(out_sub_path, 'ply_label',
                                                                   'label_%s_%d' % (offset_name, idx_h5))
                                 data_utils.save_ply_property_batch(data[0:item_num, :, 0:3],
                                                                    label_seg[0:item_num, ...],
                                                                    filepath_label_ply, data_num[0:item_num, ...], 14)
 
-                                filepath_rgb_ply = os.path.join(folder, dataset, 'ply_rgb',
+                                filepath_rgb_ply = os.path.join(out_sub_path, 'ply_rgb',
                                                                 'rgb_%s_%d' % (offset_name, idx_h5))
                                 data_utils.save_ply_color_batch(data[0:item_num, :, 0:3],
                                                                 (data[0:item_num, :, 3:] + 0.5) * 255,

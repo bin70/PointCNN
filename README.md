@@ -173,11 +173,11 @@ Here we list the commands for training/evaluating PointCNN on classification and
   python3 eval_s3dis.py
   ```
  We use a hidden marker file to note when prepare is finished to avoid re-processing. This cache can be invalidated by deleting the markers. 
- 
+
  Please notice that these command just for Area 1 (specified by -a 1 option) validation. Results on other Areas can be computed by iterating -a option.
 
   * #### ScanNet
-  Please refer to [data_conversions](data_conversions/README.md) for downloading ScanNet, then:
+    Please refer to [data_conversions](data_conversions/README.md) for downloading ScanNet, then:
   ```
   cd data_conversions
   python3 prepare_scannet_seg_data.py
@@ -189,7 +189,7 @@ Here we list the commands for training/evaluating PointCNN on classification and
   python3 eval_scannet.py -d <path to *_pred.h5> -p <path to scannet_test.pickle>
   ```
   * #### Semantic3D
-  ```
+  ```bash
   cd data_conversions
   bash download_semantic3d.sh
   bash un7z_semantic3d.sh
@@ -205,7 +205,8 @@ Here we list the commands for training/evaluating PointCNN on classification and
 
 * ### Tensorboard
   If you want to moniter your train step, we recommand you use following command
-  ```
+  ```bash
   cd <your path>/PointCNN
   tensorboard --logdir=../models/<seg/cls> <--port=6006>
   ```
+

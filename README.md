@@ -1,6 +1,6 @@
 # PointCNN: Convolution On X-Transformed Points
 
-Created by <a href="http://yangyan.li" target="_blank">Yangyan Li</a>, Rui Bu, Mingchao Sun, Wei Wu, Xinhan Di, and Baoquan Chen.
+Created by <a href="http://yangyan.li" target="_blank">Yangyan Li</a>, Rui Bu, Mingchao Sun, Wei Wu, Xinhan Di, and <a href="https://cfcs.pku.edu.cn/baoquan/" target="_blank">Baoquan Chen</a>.
 
 ## Introduction
 
@@ -17,12 +17,16 @@ See our <a href="http://arxiv.org/abs/1801.07791" target="_blank">preprint on ar
 Pretrained models can be downloaded from <a href="https://1drv.ms/f/s!AiHh4BK32df6gYFCzzpRz0nsJmQxSg" target="_blank">here</a>.
 
 ### Performance on Recent Benchmarks
+<a href="https://hkust-vgd.github.io/scanobjectnn/" target="_blank">Revisiting Point Cloud Classification: A New Benchmark Dataset and Classification Model on Real-World Data</a>
+
 <a href="https://arxiv.org/abs/1812.02713" target="_blank">PartNet: A Large-scale Benchmark for Fine-grained and Hierarchical Part-level 3D Object Understanding</a>
 
 <a href="https://arxiv.org/abs/1812.06216" target="_blank">ABC: A Big CAD Model Dataset For Geometric Deep Learning</a>
 
 ### Practical Applications
 <a href="https://medium.com/geoai/3d-cities-deep-learning-in-three-dimensional-space-29f9dafdfd73" target="_blank">3D cities: Deep Learning in three-dimensional space</a> (from <a href="https://www.esri.com/en-us/home" target="_blank">Esri</a>)
+
+<a href="https://medium.com/geoai/pointcnn-replacing-50-000-man-hours-with-ai-d7397c1e7ffe" target="_blank">PointCNN: replacing 50,000 man hours with AI</a> (from <a href="https://www.esri.com/en-us/home" target="_blank">Esri</a>)
 
 ### More Implementations
 * <a href="https://github.com/rusty1s/pytorch_geometric" target="_blank">Pytorch implementation from PyTorch Geometric</a>
@@ -56,7 +60,7 @@ xdconv_params = [dict(zip(xdconv_param_name, xdconv_param)) for xdconv_param in
                   (8, 6, 1, 0),
                   (8, 4, 0, 0)]]
 ```
-Each element in xconv_params is a tuple of (K, D, P, C, links), where K is the neighborhood size, D is the dilation rate, P is the representative point number in the output (-1 means all input points are output representative points), and C is the output channel number. The links are used for adding DenseNet style links, e.g., [-1, -2] will tell the current layer to receive inputs from the previous two layers. from Each element specifies the parameters of one X-Conv layer, and they are stacked to create a deep network.
+Each element in xconv_params is a tuple of (K, D, P, C, links), where K is the neighborhood size, D is the dilation rate, P is the representative point number in the output (-1 means all input points are output representative points), and C is the output channel number. The links are used for adding DenseNet style links, e.g., [-1, -2] will tell the current layer to receive inputs from the previous two layers. Each element specifies the parameters of one X-Conv layer, and they are stacked to create a deep network.
 
 Each element in xdconv_params is a tuple of (K, D, pts_layer_idx, qrs_layer_idx), where K and D have the same meaning as that in xconv_params, pts_layer_idx specifies the output of which X-Conv layer (from the xconv_params) will be the input of this X-DeConv layer, and qrs_layer_idx specifies the output of which X-Conv layer (from the xconv_params) will be forwarded and fused with the output of this X-DeConv layer. The P and C parameters of this X-DeConv layer is also determined by qrs_layer_idx. Similarly, each element specifies the parameters of one X-DeConv layer, and they are stacked to create a deep network.
 

@@ -1,4 +1,7 @@
-#!/usr/bin/env bash -e
+#!/usr/bin/env bash
+
+set -e
+
 BASE_DIR=${1-../../data/semantic3d}
 
 # Helper function to skip unpacking if already unpacked. Uses markers
@@ -27,6 +30,13 @@ unpack $BASE_DIR/train/sg27_station9_intensity_rgb.7z
 unpack $BASE_DIR/train/sg28_station4_intensity_rgb.7z
 unpack $BASE_DIR/train/untermaederbrunnen_station1_xyz_intensity_rgb.7z
 unpack $BASE_DIR/train/sem8_labels_training.7z
+
+[ -f $BASE_DIR/val/bildstein_station3_xyz_intensity_rgb.labels ] || mv $BASE_DIR/train/bildstein_station3_xyz_intensity_rgb.labels $BASE_DIR/val
+[ -f $BASE_DIR/val/domfountain_station2_xyz_intensity_rgb.labels ] || mv $BASE_DIR/train/domfountain_station2_xyz_intensity_rgb.labels $BASE_DIR/val
+[ -f $BASE_DIR/val/sg27_station4_intensity_rgb.labels ] || mv $BASE_DIR/train/sg27_station4_intensity_rgb.labels $BASE_DIR/val
+[ -f $BASE_DIR/val/untermaederbrunnen_station3_xyz_intensity_rgb.labels ] || mv $BASE_DIR/train/untermaederbrunnen_station3_xyz_intensity_rgb.labels $BASE_DIR/val
+
+[ -f $BASE_DIR/train/neugasse_station1_xyz_intensity_rgb.txt ] || mv $BASE_DIR/train/station1_xyz_intensity_rgb.txt $BASE_DIR/train/neugasse_station1_xyz_intensity_rgb.txt
 
 # Validation data
 unpack $BASE_DIR/val/bildstein_station3_xyz_intensity_rgb.7z
